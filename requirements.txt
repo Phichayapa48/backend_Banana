@@ -5,5 +5,4 @@ numpy==1.26.4
 Pillow
 opencv-python-headless==4.9.0.80
 ultralytics==8.1.0
-supabase==2.3.4
-httpx==0.24.1
+supabase==1.0.0
