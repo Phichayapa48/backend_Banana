@@ -6,7 +6,6 @@ from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
-from supabase import create_client, Client
 import uvicorn
 
 app = FastAPI(title="Banana Expert AI Server")
@@ -25,9 +24,11 @@ app.add_middleware(
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "model")
 
-SUPABASE_URL = "https://ypdmdfdwzldsifijajrm.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlwZG1kZmR3emxkc2lmaWphanJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMyOTI0NzQsImV4cCI6MjA3ODg2ODQ3NH0._t_GLxY8JHKE-hXganFzq9zztQh2LyqtmB7VqGmU8EE"
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# Supabase disabled for deployment compatibility
+# from supabase import create_client, Client
+# SUPABASE_URL = "https://ypdmdfdwzldsifijajrm.supabase.co"
+# SUPABASE_KEY = "eyJhbG...U8EE"
+# supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # -------------------------
 # ✅ 2. LOAD MODELS
@@ -101,8 +102,11 @@ async def detect(
         banana_key = CLASS_KEYS.get(int(clses[best_idx]), "unknown")
 
         # -------------------------
-        # ✅ 4. SAVE TO SUPABASE (ปรับ logic ให้ชัดขึ้น)
+        # ✅ 4. SAVE TO SUPABASE (disabled for now)
         # -------------------------
+        # Storage feature temporarily disabled due to deployment compatibility
+        # Uncomment when supabase dependency is resolved
+        """
         if allow_storage.lower() == "true":
             await image.seek(0)
             file_bits = await image.read()
@@ -124,6 +128,7 @@ async def detect(
             }).execute()
 
             print("✨ บันทึกข้อมูลลง Supabase เรียบร้อย!")
+        """
 
         return {
             "success": True,
@@ -134,6 +139,14 @@ async def detect(
     except Exception as e:
         print(f"❌ Error: {e}")
         return {"success": False, "reason": "server_error", "detail": str(e)}
+
+@app.get("/")
+async def root():
+    return {"message": "Banana AI Server is running!", "status": "ok"}
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
