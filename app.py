@@ -33,15 +33,15 @@ MODEL_DIR = os.path.join(BASE_DIR, "model")
 # -------------------------
 # ✅ 2. LOAD MODELS
 # -------------------------
-# 🔥 โมเดลหลัก (จำแนกสายพันธุ์)
+# 🔥 โมเดลหลัก (จำแนกสายพันธุ์) - ใช้ ONNX
 try:
-    MODEL_REAL = YOLO(os.path.join(MODEL_DIR, "best_modelv8sbg.pt"))
+    MODEL_REAL = YOLO(os.path.join(MODEL_DIR, "best_modelv8sbg.onnx"))
 except:
-    MODEL_REAL = YOLO(os.path.join(MODEL_DIR, "best_modelv8nbg.pt"))
+    MODEL_REAL = YOLO(os.path.join(MODEL_DIR, "best_modelv8nbg.onnx"))
 
-# 🔥 โมเดลกรอง (มี/ไม่มีกล้วย)
+# 🔥 โมเดลกรอง (มี/ไม่มีกล้วย) - ใช้ ONNX
 try:
-    MODEL_FILTER = YOLO(os.path.join(MODEL_DIR, "best_m1_bgv8s.pt"))
+    MODEL_FILTER = YOLO(os.path.join(MODEL_DIR, "best_m1_bgv8s.onnx"))
 except:
     MODEL_FILTER = None
 
